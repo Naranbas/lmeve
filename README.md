@@ -12,9 +12,9 @@ All Eve Related Materials are Property Of CCP Games / Fenris Creations.
 
 Login to your Linux host. You need `docker` and the `docker compose` plugin installed.
 
-1 `git clone https://github.com/Naranbas/lmeve`
-2 `cd lmeve/docker`
-3 `docker compose up --build`
+1 `git clone https://github.com/Naranbas/lmeve`  
+2 `cd lmeve/docker`  
+3 `docker compose up --build`  
 
 This builds the `lmeve` and `eve_data_updater` images from this checkout (not from a separately-downloaded
 bundle), so any changes you make in this repo are reflected on the next `--build`.
@@ -22,9 +22,9 @@ bundle), so any changes you make in this repo are reflected on the next `--build
 Wait for the containers to build and static data to download and update - the first run downloads the EVE
 Static Data Export (~100+ MB) and can take a while.
 
-4 Login to your LMeve in your browser on localhost:80 , by default user and password is `admin`
-5 Change password in GUI: `Settings` -&gt; `Change password`
-6 Remove INSTALL file in LMeve root: `docker compose exec docker-lmeve-1 rm /var/www/lmeve/INSTALL`
+4 Login to your LMeve in your browser on localhost:80 , by default user and password is `admin`  
+5 Change password in GUI: `Settings` -&gt; `Change password`  
+6 Remove INSTALL file in LMeve root: `docker compose exec docker-lmeve-1 rm /var/www/lmeve/INSTALL`  
 
 By default app is exposed on port 80 to local machine only. To expose to network, edit lmeve/docker/docker-compose.yml prior to Step 3.
 If you do, consider using nginx reverse proxy with TLS/HTTPS in front of it in order to encrypt traffic.

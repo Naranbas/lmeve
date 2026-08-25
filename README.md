@@ -1,142 +1,40 @@
 <h1>About</h1>
-This project was started at the request of Aideron Technologies CEO in 2013. This software is basically an advanced prototype.
-Code beauty was not a priority, moreover this is not in objective PHP, just plain-old structural PHP.
-I had plans to refactor entire project into CodeIgniter framework, but this plan is currently on hold.
+This project was started by Lukasz "Lukas Rox" Pozniak at the request of Aideron Technologies CEO in 2013. 
+This software is basically an advanced prototype. Code beauty was not a priority, moreover this is not in objective PHP, just plain-old structural PHP.
+Official Discord channel of main codebase: https://discord.gg/9yBhuPd
 
-More information: http://pozniak.pl/wp/?tag=lmeve
-
-Official Discord channel: https://discord.gg/9yBhuPd
-
-<h3>Please do not contact "Lukas Rox" in game for support, because he does not play eve </h3>
-If you find a problem, please come to official Discord channel here https://discord.gg/9yBhuPd 
-and/or open an Issue on GitHub project page: https://github.com/roxlukas/lmeve/issues
-
-Try the LMeve Database module here: http://pozniak.pl/database/index.php
-follow lmeve production and get more information: http://pozniak.pl/wp/?tag=lmeve
+This fork (https://github.com/Naranbas/lmeve) is an attempt at renewal of the software using Claude AI.
 
 This app requires EVE Online corporation CEO ESI keys to function.
-All Eve Related Materials are Property Of CCP Games
-
-<h3>Please do not contact "Lukas Rox" in game for support, because I do not read eve-mail</h3>
-If you find a problem, please open an Issue on GitHub project page: https://github.com/roxlukas/lmeve/issues
+All Eve Related Materials are Property Of CCP Games / Fenris Creations.
 
 <h1>Docker Setup Instructions</h1>
 
-Login to you linux host. You need `docker.io` and `docker-compose` installed.
+Login to your Linux host. You need `docker` and the `docker compose` plugin installed.
 
-1 `wget https://github.com/roxlukas/lmeve/raw/master/docker/lmeve-docker.tbz2`
-2 `tar -xjf lmeve-docker.tbz2`
-3 `cd lmeve`
-4 `docker-compose up`
+1 `git clone https://github.com/Naranbas/lmeve`
+2 `cd lmeve/docker`
+3 `docker compose up --build`
 
-Wait for the containers to build and static data to download and update.
+This builds the `lmeve` and `eve_data_updater` images from this checkout (not from a separately-downloaded
+bundle), so any changes you make in this repo are reflected on the next `--build`.
 
-5 Login to your LMeve, by default user and password is `admin`
-6 Change password in GUI: `Settings` -&gt; `Change password`
-7 Remove INSTALL file in LMeve root `docker exec -it lmeve_lmeve_1 rm /var/www/lmeve/INSTALL`
+Wait for the containers to build and static data to download and update - the first run downloads the EVE
+Static Data Export (~100+ MB) and can take a while.
 
-By default app is exposed on port 80. Consider using nginx reverse proxy with TLS/HTTPS in front of it in order to encrypt traffic.
+4 Login to your LMeve in your browser on localhost:80 , by default user and password is `admin`
+5 Change password in GUI: `Settings` -&gt; `Change password`
+6 Remove INSTALL file in LMeve root: `docker compose exec docker-lmeve-1 rm /var/www/lmeve/INSTALL`
 
-To update static data:
+By default app is exposed on port 80 to local machine only. To expose to network, edit lmeve/docker/docker-compose.yml prior to Step 3.
+If you do, consider using nginx reverse proxy with TLS/HTTPS in front of it in order to encrypt traffic.
 
-`docker start lmeve_eve_data_updater_1`
-
-<h1>Manual Setup instructions</h1>
-
-
-Steps for installing LMEVE : <br>
-	1. install LmEvE core<br>
-	2. install dependancies<br>
-	3. configure apache2<br>
-	4. configure mysql<br>
-	5. lmeve graphics<br>
-	6. Registering with ccp<br>
-	7. Finalization<br>
-	<br>
-1 install lmeve core : <br>
-  cd /var/www<br>
-  sudo git clone https://github.com/roxlukas/lmeve<br>
-    	  <br>
-	  <br>
-2 install lmeve dependancies : <br>
-
-  sudo apt-get install php-mysql php-pear apache2 libapache2-mod-php<br>
-            php-cli php-dev libyaml-dev, php-mbstring <br>
-            python-yaml mysql-server mysql-client unzip<br>
-  <br>
-  <br>
-3 Configure Apache2 : <br>
-	sudo nano /etc/apache2/sites-enabled/000-default.conf<br>
-	change DocumentRoot to : /var/www/lmeve/wwwroot<br>
-	<br>
-	  <br>
-4 Configure MySQL install : <br>
-	sudo mkdir /Incoming <br>
-	cd /Incoming <br>
-	sudo wget "https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2" <br>
-	tar -xjf mysql-latest.tar.bz2 --wildcards --no-anchored '*sql' -C /Incoming/ --strip-components 1 <br>
-	sudo mv *.sql /Incoming/staticdata.sql <br>
-	sudo mysql <br>
-	CREATE DATABASE lmeve; <br>
-	CREATE DATABASE EveStaticData; <br>
-	USE lmeve;<br>
-	source /var/www/lmeve/data/schema.sql;<br>
-	USE EveStaticData;<br>
-	source /Incoming/staticdata.sql;<br>
-	CREATE USER 'lmeve'@'%' IDENTIFIED BY 'lmpassword';  		//<-- your custom password here<br>
-	GRANT ALL PRIVILEGES ON `lmeve`.* TO 'lmeve'@'%';    		// Change % to your lmeve internal network address<br>
-	GRANT ALL PRIVILEGES ON `EveStaticData`.* TO 'lmeve'@'%'; // Change % to your lmeve internal network address<br>
-	FLUSH PRIVILEGES;<br>
-<br>
-    <br> 
-5 install lmeve icons and graphics <br>
- //remove placeholder ccp icon and img folders, download image package <br>
-  cd /var/www/lmeve/wwwroot <br>
-  sudo rm -fr ccp_icons ccp_img <br>
-  cd /Incoming <br>
-  sudo wget www.ash-online.net/lmevegfx/lmevegfx.tar.gz <br>
-  sudo tar -zjvf lmevegfx.tar.gz -C / <br>
-
-
-6 Configure CCP Developer application using the lmeve sso config guide : <br>
-  https://github.com/roxlukas/lmeve/wiki/Integrating-LMeve-with-EVE-SSO <br>
-
-
-7 Finalize installation : <br>
-	cd /var/www/lmeve/config <br>
-	sudo nano config-dist.php  <br>
-	edit the config file and save it as config.php  <br>
-  Set up API poller in cron to run every 15 minutes -   */15 * * * * apache2/bin/php -h /var/www/lmeve/bin/poller.php <br>
-	login to lmeve using admin / admin credentials and wait a few minutes while lmeve parses and alters database tables <br>
-	Change admin password in Settings <br>
-	Create a user accout for yourself <br>
-	Logout, Login with your new account <br>
-	Add corp ESI key in Settings -> ESI Keys <br>
+To update static data again later (re-uses the existing container, so it won't re-import the LMeve schema, only refresh the EVE static data):
+`docker compose start eve_data_updater`
 
   
 <h1>Credits and copyrights</h1>
 
 * LMeve by Lukasz "Lukas Rox" Pozniak
-
 * LMframework v3 by 2005-2014 Lukasz Pozniak
-
 * rixxjavix.css skin by Bryan K. "Rixx Javix" Ward
-
-<h3>Thanks!</h3>
-
-* TheAhmosis and Razeu - it's their idea that I had the pleasure to wrap in code
-* Crysis McNally - for excellent ideas and thorough testing
-* Aideron Technologies - for excellent closed beta
-* CCP Games - for making such a great game and providing API for us, developer kind, to tinker with
-* To all supporters and donators. Thank you!
-
-<h3>Donations are welcome!</h3>
-
-According to CCP Developers License paragraph 4 section 4 (https://developers.eveonline.com/resource/license-agreement)
-you can buy me a coffe or help fund the server.
-
-If you'd like to support the development, feel free to do so: https://www.paypal.me/roxlukas
-
-<h4>Top donators:</h4>
-Starfire Dai, Crysis McNally
-

@@ -9,58 +9,24 @@ function getCharacterName($characterID) {
     }
 }
 
+// The three functions below (getCharacterInfoXML, getCharInfoXML,
+// getCharactersXML) called CCP's legacy XML API (api.eveonline.com /
+// {custom}/eve/CharacterInfo.xml.aspx), which CCP shut down years ago.
+// They're kept only so nothing that still references them fatals; none of
+// them are called from anywhere in the app anymore (character linking now
+// goes through ESI tokens - see Settings -> ESI API Tokens, include/94.php,
+// include/95.php). They intentionally no longer make network calls.
+
 function getCharacterInfoXML($id) {
-	global $LM_XML_API_SERVER;
-	if (($id)==0) return FALSE;
-	$api_url="https://$LM_XML_API_SERVER/eve/CharacterInfo.xml.aspx?characterID=$id";
-	//echo("api_url=$api_url<br/>");
-	$cache="../var/CharacterInfo_$id.xml";
-
-	if (file_exists($cache) && (filemtime($cache)>(time() - 60*60*24 ))) {
-	    $data = file_get_contents($cache);
-	} else {
- 	    $data = file_get_contents($api_url);
-            if ($data===false) {
-                //http errors
-            } else {
-                file_put_contents($cache, $data, LOCK_EX);
-            }
-	}
-
-        $xml=simplexml_load_string($data);
-        $res=$xml->result;
-        return $res;
+	return FALSE; // retired CCP XML API, see comment above
 }
 
 function getCharInfoXML($id) {
-	if (($id)==0) return FALSE;
-	$api_url="https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=$id";
-	
- 	$data = file_get_contents($api_url);
-        
-        if ($data===false) {
-            return false;
-        }
-
-        $xml=simplexml_load_string($data);
-        $res=$xml->result;
-        return $res;
+	return FALSE; // retired CCP XML API, see comment above
 }
 
 function getCharactersXML($keyid,$verification) {
-	$charactersURL="https://api.eveonline.com/account/Characters.xml.aspx";
-	$charactersURL=$charactersURL."?keyID=".$keyid."&vCode=".$verification;
-        
- 	$data = file_get_contents($charactersURL);
-        
-        if ($data===false) {
-            return false;
-        }
-       
-        $xml=simplexml_load_string($data);
-        $res=$xml->result->rowset->row;
-        //<row name="Lukas Rox" characterID="816121566" corporationName="Aideron Technologies" corporationID="98126753" allianceID="0" allianceName="" factionID="0" factionName="" />
-        return $res;
+	return FALSE; // retired CCP XML API, see comment above
 }
 
 function getCharacters() {

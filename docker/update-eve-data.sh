@@ -33,32 +33,26 @@ else
     GRANT ALL PRIVILEGES ON eve_static_data.* TO '${DB_USER}'@'%';
     FLUSH PRIVILEGES;
 EOSQL
-  
-    wget https://raw.githubusercontent.com/roxlukas/lmeve/master/data/schema.sql
-    
-    mysql -h ${DB_HOST} -u root -p${MYSQL_ROOT_PASSWORD} lmeve < schema.sql
-    
-    #clean up
-    rm schema.sql
+
+    # Schema now ships in the image (see Dockerfile.updater) instead of being
+    # fetched from roxlukas/lmeve on GitHub, so this always matches the code
+    # you're actually running.
+    mysql -h ${DB_HOST} -u root -p${MYSQL_ROOT_PASSWORD} lmeve < /app/data/schema.sql
 fi
+
 #update EVE Static Data
-wget "https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2"
-tar -xjf mysql-latest.tar.bz2
+# fuzzwork.co.uk restructured their dump directory - the old
+# "mysql-latest.tar.bz2" bundle is gone. The current convenience link is a
+# single gzipped SQL file. If this ever moves again, check
+# https://www.fuzzwork.co.uk/dump/ for the current "latest-mysql*" name.
+wget "https://www.fuzzwork.co.uk/dump/latest-mysql.sql.gz" -O eve_static_data.sql.gz
 
-# Find the SQL file
-SQL_FILE=$(find . -name "*.sql" -type f)
+gunzip -f eve_static_data.sql.gz
 
-if [ -z "$SQL_FILE" ]; then
-    echo "Error: SQL file not found in the archive"
-    exit 1
-fi
-
-echo "Found SQL file: $SQL_FILE"
-
-# Import the SQL file
-mysql -h ${DB_HOST} -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME_STATIC} < "$SQL_FILE"
+echo "Importing EVE Static Data (this can take a while)..."
+mysql -h ${DB_HOST} -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME_STATIC} < eve_static_data.sql
 
 # Clean up
-rm -rf mysql-latest.tar.bz2 $(dirname "$SQL_FILE")
+rm -f eve_static_data.sql
 
 echo "EVE Static Data updated successfully"

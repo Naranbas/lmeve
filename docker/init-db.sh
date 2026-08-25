@@ -9,6 +9,5 @@ mysql -u root -p${MYSQL_ROOT_PASSWORD} <<-EOSQL
     FLUSH PRIVILEGES;
 EOSQL
 
-#curl https://raw.githubusercontent.com/roxlukas/lmeve/master/data/schema.sql > schema.sql
-
-#mysql -u root -p${MYSQL_ROOT_PASSWORD} lmeve < schema.sql
+# Schema is loaded by the eve_data_updater container (docker/update-eve-data.sh),
+# which ships data/schema.sql from this repo directly.

@@ -9,45 +9,18 @@ $MENUITEM=9; //Panel ID in menu. Used in hyperlinks
 $PANELNAME='Characters'; //Panel name (optional)
 //standard header ends here
 
-include_once("character.php");
-
-global $LM_EVEDB;
-
-if (!token_verify()) die("Invalid or expired token.");
-$keyid=secureGETnum('keyid');
-$verification=secureGETstr('verification');
-
-
-
-$chars=getCharactersXML($keyid,$verification);
-
-$valid_chars=filterByCorps($chars);
-
-$final_chars=filterByMembersApi($valid_chars);
-
-$connected=connectCharacters($final_chars);
-
+// This used to submit to CCP's legacy XML API (api.eveonline.com) via
+// getCharactersXML(). That API is long gone, so rather than firing a
+// request that can only fail, redirect back to the notice on 94.php.
 ?>
             <span class="tytul">
 		<?php echo($PANELNAME); ?>
 	    </span>
-        
-        <table class="lmframework">
-            <tr><th>Characters available in Your personal API</th><td></td><th>Characters eligible to link</th><td></td><th>Characters available in Corporation API</th></tr>
-            <tr><td style="text-align: center;"><?php displayCharacters($chars); ?></td><td><img src="<?=getUrl()?>ccp_icons/9_64_6.png" alt="-&gt;" /></td><td style="text-align: center;"><?php displayCharacters($valid_chars); ?></td><td><img src="<?=getUrl()?>ccp_icons/9_64_6.png" alt="-&gt;" /></td><td style="text-align: center;"><?php displayCharacters($final_chars); ?></td></tr>
-        </table>
-<?php
-    if ($connected>0) {
-        echo("<h3>$connected character(s) have been linked to your LMEve account.</h3>"); 
-    } else {
-        echo('<h3>No characters linked!</h3> If characters are eligible, but do not show in corporation API (last column), please try again later.');
-    }
-?>
-                <form method="get" action="">
+            <img src="<?=getUrl()?>ccp_icons/38_16_208.png" alt="(!) " style="float: left;"/>
+            Personal API Keys were retired by CCP and can no longer be used. Please use
+            <strong>Settings &rarr; ESI API Tokens</strong> to link characters instead.<br/><br/>
+            <form method="get" action="">
 		<input type="hidden" name="id" value="9" />
 		<input type="hidden" name="id2" value="0" />
 		<input type="submit" value="OK" />
-		</form>
-        <!--
-		<script type="text/javascript">location.href="index.php?id=9&id2=0";</script>
-	    //-->
+            </form>

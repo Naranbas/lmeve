@@ -60,7 +60,7 @@ if ($argc != 3) die("Personal API Killmail loader.\r\nUse: php ".__FILE__." keyI
 		$aki=get_xml_contents("$API_BASEURL/account/APIKeyInfo.xml.aspx?keyID={$keyid}&vCode={$vcode}","{$mycache}/APIKeyInfo_$keyid.xml",0*60);
 		if (isset($aki->error)) {
 			apiSaveWarning($keyid,$aki->error,"APIKeyInfo.xml");
-			continue;
+			exit(1);
 		} else {
 			$rows=$aki->result->key->rowset->row;
                         if (count($rows)>0) foreach($rows as $row) {
@@ -72,7 +72,7 @@ if ($argc != 3) die("Personal API Killmail loader.\r\nUse: php ".__FILE__." keyI
 		}
 	} else {
 		warning("APIKeyInfo.xml",$FEED_BLOCKED);
-		continue;
+		exit(1);
 	}
 	if (count($characters)>0) {
             foreach($characters as $row) {

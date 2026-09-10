@@ -1,4 +1,10 @@
-<h1>About</h1>
+# Notice
+Still under repair. To fix:
+- ESI login process
+- T2 items
+- probably other stuff
+
+# About
 This project was started by Lukasz "Lukas Rox" Pozniak at the request of Aideron Technologies CEO in 2013.  
 This software is basically an advanced prototype. Code beauty was not a priority, moreover this is not in objective PHP, just plain-old structural PHP.  
 Official Discord channel of main codebase: https://discord.gg/9yBhuPd  
@@ -8,7 +14,7 @@ This fork (https://github.com/Naranbas/lmeve) is an attempt at renewal of the so
 This app requires EVE Online corporation CEO ESI keys to function.  
 All Eve Related Materials are Property Of CCP Games / Fenris Creations.  
 
-<h1>Docker Setup Instructions</h1>
+# Docker Setup Instructions
   
 Install Ubuntu 24.04 in Docker (recommended) or log in to your Linux host.  
 You need docker and the docker compose plugin installed.  
@@ -35,7 +41,7 @@ If you do, consider using nginx reverse proxy with TLS/HTTPS in front of it in o
 To update static data again later (re-uses the existing container, so it won't re-import the LMeve schema, only refresh the EVE static data):  
 8 `docker compose start eve_data_updater`  
 
-<h1>Credits and copyrights</h1>
+# Credits and copyrights
 
 * LMeve by Lukasz "Lukas Rox" Pozniak
 * LMframework v3 by 2005-2014 Lukasz Pozniak

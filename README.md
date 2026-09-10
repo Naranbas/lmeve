@@ -25,15 +25,15 @@ bundle), so any changes you make in this repo are reflected on the next `--build
 Wait for the containers to build and static data to download and update - the first run downloads the EVE
 Static Data Export (~100+ MB) and can take a while.  
 
-4 Login to your LMeve in your browser on `localhost:80` , by default user and password is `admin`  
-5 Change password in GUI: `Settings` -&gt; `Change password`  
-6 Remove INSTALL file in LMeve root: `docker exec docker-lmeve-1 rm /var/www/lmeve/INSTALL`  
+5 Login to your LMeve in your browser on `localhost:80` , by default user and password is `admin`  
+6 Change password in GUI: `Settings` -&gt; `Change password`  
+7 Remove INSTALL file in LMeve root: `docker exec docker-lmeve-1 rm /var/www/lmeve/INSTALL`  
 
 By default app is exposed on port 80 to local machine only. To expose to network, edit lmeve/docker/docker-compose.yml prior to Step 3.
 If you do, consider using nginx reverse proxy with TLS/HTTPS in front of it in order to encrypt traffic.
 
 To update static data again later (re-uses the existing container, so it won't re-import the LMeve schema, only refresh the EVE static data):
-`docker compose start eve_data_updater`
+8 `docker compose start eve_data_updater`  
 
 <h1>Credits and copyrights</h1>
 
